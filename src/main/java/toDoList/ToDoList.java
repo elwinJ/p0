@@ -53,7 +53,7 @@ public class ToDoList {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String ...args) {
         Scanner myScanner = new Scanner(System.in);
         int mainOption = 0;
         boolean mainFlag = true;

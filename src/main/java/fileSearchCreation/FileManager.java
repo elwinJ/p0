@@ -23,11 +23,8 @@ public class FileManager {
         try { //attempt to get the parent_data_dir and creates if not exist.
 
             String pwd = getCurrentDirectory(); // gets this project's directory.
-
             Path path = Paths.get( pwd + parent_data_dir);
-
             Files.createDirectories(path);
-
             System.out.println(parent_data_dir + " was created");
 
         } catch (IOException e) {

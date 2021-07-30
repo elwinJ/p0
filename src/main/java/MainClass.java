@@ -1,5 +1,6 @@
-import java.util.Arrays;
+import toDoList.ToDoList;
 import java.util.Scanner;
+import static UserInteractionUtils.InputUtils.InputConfirmation;
 
 public class MainClass {
 
@@ -13,33 +14,42 @@ public class MainClass {
         boolean useNotes = false; //To start a mode.
         boolean useJournal = false; //To start a mode.
 
+        int option = -1232432;
+
+        String optionArray[] = {"To Do List", "Notes", "Journal", "Exit Program"};
+
         Scanner myScanner = new Scanner(System.in);
         while (isQuit == false) { //This while-loop will keep the whole program running.
 
             while (isSelecting) { //This while-loop will keep the selection mode running.
                 try {
-                    System.out.println("Choose Mode [1]To-Do-List , [2]Notes, [3]Journal :");
+                    System.out.println("Choose Mode [1]To-Do-List , [2]Notes, [3]Journal [4]Quit:");
                     String modeNum = myScanner.nextLine();
 
-                    int option = Integer.parseInt(modeNum);
+                    option = Integer.parseInt(modeNum);
 
-                    if (option >=1 && option <= 3) {
+                    if (option >=1 && option <= 4) {
                         switch(option) {
                             case 1:
-                                System.out.println("You have choosen option " + option + ", To-Do-List");
+                                //System.out.println("You have chosen option " + option + ", To-Do-List");
                                 isSelecting = false;
                                 useToDoList = true;
                                 break;
                             case 2:
-                                System.out.println("You have choosen option " + option + ", Notes");
+                                //System.out.println("You have chosen option " + option + ", Notes");
                                 isSelecting = false;
                                 useNotes = true;
                                 break;
                             case 3:
-                                System.out.println("You have choosen option " + option + ", Journal");
+                                //System.out.println("You have chosen option " + option + ", Journal");
                                 isSelecting = false;
                                 useJournal = true;
                                 break;
+                            case 4:
+                                isSelecting = false;
+                                isQuit = true;
+
+
                         }
                     } else {
                         System.out.println("Please enter 1 for To-Do-List, 2 for Notes, 3 for Journal");
@@ -52,38 +62,17 @@ public class MainClass {
                     //myScanner.close();
                 }
             }
-
-            boolean isConfirmed = false;
-            boolean contains;
-
-            while(isConfirmed != true) { //This while-loop is to keep the confirmation running.
-                String[] accept = {"y","yes"}; //Possible user confirmation options.
-                String[] deny = {"n","no"}; //Possible user denial options.
-                System.out.println("Do you want to coninue [Y]yes [N]no ");
-                String confirmation = myScanner.nextLine();
-
-                confirmation = confirmation.toLowerCase();
-                System.out.println(confirmation);
-
-
-                if (Arrays.stream(accept).anyMatch(confirmation::equals) || Arrays.stream(accept).anyMatch(confirmation::equals)) {
-                    isConfirmed = true;
-                    System.out.println("You have confirmed.");
-                }
-
-                if (Arrays.stream(deny).anyMatch(confirmation::equals) || Arrays.stream(deny).anyMatch(confirmation::equals)) {
-                    System.out.println("You have denied.");
-                    isConfirmed = true;
-                    useToDoList = false;
-                    useNotes = false;
-                    useJournal = false;
-                    isSelecting = true;
-                }
+            if(!InputConfirmation("Want to continue with the following mode: "+ optionArray[option - 1])){
+                useToDoList = false;
+                useNotes = false;
+                useJournal = false;
+                isSelecting = true;
             }
-
-
             while(useToDoList) { //This while-loop will run the To Do List program.
                 System.out.println("In to do list");
+                ToDoList.main();
+                useToDoList = false; //Will flag to exit loop.
+                isSelecting = true; //Will flag to enter selection mode loop.
             }
 
 
