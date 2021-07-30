@@ -8,6 +8,16 @@ public class FileManager {
 
     private static String parent_data_dir = "/main_data_folder";
 
+//    public static boolean checkFilePath(String taskSetPath){
+//
+//        Path path = Paths.get(taskSetPath);
+//        if (Files.exists(path)){
+//            return(true);
+//        } else {
+//            return(false);
+//        }
+//    }
+
     public static void initDir() {
 
         try { //attempt to get the parent_data_dir and creates if not exist.

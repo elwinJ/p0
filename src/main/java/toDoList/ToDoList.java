@@ -1,19 +1,21 @@
 package toDoList;
-import java.io.FileWriter;
+import java.io.*;
 import java.nio.file.*;
-import java.util.Arrays;
+//import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.File; //Import the file class
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static UserInteractionUtils.InputUtils.InputConfirmation;
+
 public class ToDoList {
 
-    private static void addTask(String taskSetName, String taskDescription, String taskDueDate, String taskCompletetionStatus){
+    private static final String toDoListMainFolder = System.getProperty("user.dir") + "\\"+ "central_folder"+"\\" +"to_do_list_folder"+ "\\";
+
+    private static void addTask(String taskSetName, String taskDescription, String taskDueDate, String taskCompletionStatus){
         try{
-            Path path = Paths.get(System.getProperty("user.dir") + "\\"+ "central_folder"+"\\" +"to_do_list_folder"+ "\\" +taskSetName);
-            String task = "[ " + taskDescription + " ; " + taskDueDate + " ; " + taskCompletetionStatus + "] \n";
+            Path path = Paths.get(toDoListMainFolder +taskSetName);
+            String task = "[ " + taskDescription + " ; " + taskDueDate + " ; " + taskCompletionStatus + " ] \n";
             System.out.println("Checking if this path exists: " + path);
             if (Files.exists(path)){
                 System.out.println("Path exists.");
@@ -32,27 +34,44 @@ public class ToDoList {
         }
     }
 
-    public static void main(String[] args){
+        private static void readTask(String fullPath){
+        Path path = Paths.get( fullPath);
 
+        BufferedReader reader;
+        //ArrayList<String> task = new ArrayList<>();
+        try{
+
+            reader = new BufferedReader(new FileReader(String.valueOf(path)));
+            String line = reader.readLine(); //Will store what the BufferedReader reads.
+            while (line != null){ //will continue until there are no more lines to read.
+                System.out.println(line);
+                //task.add(line); //will add task to an array
+                line = reader.readLine(); //will check next line
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
         Scanner myScanner = new Scanner(System.in);
         int mainOption = 0;
         boolean mainFlag = true;
         boolean flag = true;
-        boolean isConfirmed = false;
+        //boolean isConfirmed = false;
         String taskSetName;
         String taskDescription;
         String taskDueDate;
-        String taskCompletetionStatus;
+        String taskCompletionStatus;
 
-        System.out.println("Do you want to [1]create a new set of tasks or [2]access an existing set of tasks? or [3]go back: ");
-
-        while (mainFlag) { //Checks to see if user wants to create a new task set along with new tasks or add tasks to an exsiting task set or leave the ToDoList mode.
+        while (mainFlag) { //Checks to see if user wants to create a new task set along with new tasks or add tasks to an already existing task set or leave the ToDoList mode.
+            System.out.println("Do you want to [1]create a new set of tasks or [2]access an existing set of tasks? or [3]go back: ");
             try {
                 String mainInputOption = myScanner.nextLine();
                 mainOption = Integer.parseInt(mainInputOption);
 
                 if (mainOption == 1 || mainOption == 2 || mainOption == 3) {
-                    mainFlag = false;
+                    //mainFlag = false;
 
                 } else {
                     System.out.println("Please select option 1 or option 2 or option 3.");
@@ -60,56 +79,56 @@ public class ToDoList {
             } catch (Exception e) {
 
                 System.out.println("Enter the number one for option 1 or number two for option 2 or number three for option 3.");
-            } finally {
-                //myScanner.close();
             }
-        }
 
-        try {
-            if (mainOption == 1) {
-                System.out.println("Enter the name for the set you would want to have your created tasks under: ");
-                taskSetName = myScanner.nextLine() + ".txt";
+            try {
+                if (mainOption == 1) {
+                    System.out.println("Enter the name for the set you would want to have your created tasks under: ");
+                    taskSetName = myScanner.nextLine() + ".txt";
 
-                while (flag) {
+                    while (flag) {
 
-                    System.out.println("Enter task description: ");
-                    taskDescription = myScanner.nextLine();
+                        System.out.println("Enter task description: ");
+                        taskDescription = myScanner.nextLine();
 
-                    System.out.println("Enter task due date: ");
-                    taskDueDate = myScanner.nextLine();
+                        System.out.println("Enter task due date: ");
+                        taskDueDate = myScanner.nextLine();
 
-                    taskCompletetionStatus = "not completed";
+                        taskCompletionStatus = "not completed";
 
-                    addTask(taskSetName,taskDescription,taskDueDate,taskCompletetionStatus);
+                        addTask(taskSetName, taskDescription, taskDueDate, taskCompletionStatus);
 
-                    while(isConfirmed == false) { //This while-loop is to keep the confirmation running.
-                        System.out.println("Want to add another task? [Y]yes or [N]no: ");
-                        String[] accept = {"y","yes"}; //Possible user confirmation options.
-                        String[] deny = {"n","no"}; //Possible user denial options.
-                        String confirmation = myScanner.nextLine();
-
-                        confirmation = confirmation.toLowerCase();
-                        System.out.println(confirmation);
-
-
-                        if (Arrays.stream(accept).anyMatch(confirmation::equals) || Arrays.stream(accept).anyMatch(confirmation::equals)) {
-                            isConfirmed = true;
-                            System.out.println("You have confirmed.");
-                        }
-
-                        if (Arrays.stream(deny).anyMatch(confirmation::equals) || Arrays.stream(deny).anyMatch(confirmation::equals)) {
-                            System.out.println("You have denied.");
+                        if (!InputConfirmation("Want to add another task?")) {
                             flag = false;
-                            isConfirmed = true;
-
-                    }
+                        }
                     }
                 }
-            }
-        } catch (Exception e) {}
-        finally {
-            myScanner.close();
-        }
+                if (mainOption == 2) {
+                    String taskSetPath;
+                    while (flag) {
+                        System.out.println("What set you want to access? :");
+                        taskSetName = myScanner.nextLine() + ".txt";
+                        Path path = Paths.get(toDoListMainFolder + taskSetName);
+                        System.out.println(toDoListMainFolder + taskSetName);
+                        if (Files.exists(path)) {
+                            taskSetPath = path.toString();
+                            readTask(taskSetPath);
+                            if (!InputConfirmation("Want to access another set?")) {
+                                flag = false;
+                            }
+                            //else{}
+                        }
+                    }
 
+                }
+            }
+            catch (Exception e) {e.printStackTrace(); }
+            if(InputConfirmation("Do you want to exit back to Main Mode Menu?")){
+                mainFlag = false;
+                //flag = true;
+                //myScanner.close();
+            }
+            flag = true;
+        }
     }
 }
