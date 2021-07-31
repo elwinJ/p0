@@ -1,7 +1,7 @@
 import toDoList.ToDoList;
 import java.util.Scanner;
 import static UserInteractionUtils.InputUtils.InputConfirmation;
-
+// mvn compile exec:java
 public class MainClass {
 
     public static void main(String[] args) {

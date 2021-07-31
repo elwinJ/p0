@@ -2,11 +2,14 @@ package toDoList;
 import java.io.*;
 import java.nio.file.*;
 //import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static UserInteractionUtils.InputUtils.InputConfirmation;
+import static fileSearchCreation.FileManager.loadLines;
+import static fileSearchCreation.FileManager.showInFolder;
 
 public class ToDoList {
 
@@ -34,54 +37,53 @@ public class ToDoList {
         }
     }
 
-        private static void readTask(String fullPath){
+    private static void readTask(String fullPath){
         Path path = Paths.get( fullPath);
+        int counter = 0;
+        ArrayList<String> tasks = loadLines(fullPath);
 
-        BufferedReader reader;
-        //ArrayList<String> task = new ArrayList<>();
-        try{
-
-            reader = new BufferedReader(new FileReader(String.valueOf(path)));
-            String line = reader.readLine(); //Will store what the BufferedReader reads.
-            while (line != null){ //will continue until there are no more lines to read.
-                System.out.println(line);
-                //task.add(line); //will add task to an array
-                line = reader.readLine(); //will check next line
-            }
-        }catch(Exception e){
-            e.printStackTrace();
+        for (int index = 0; index < tasks.size(); index ++){
+            counter ++;
+            System.out.println(counter + " " + tasks.get(index));
         }
     }
+
+    private static void showTaskSets(){
+        showInFolder(toDoListMainFolder);
+    }
+
 
     public static void main(String ...args) {
         Scanner myScanner = new Scanner(System.in);
         int mainOption = 0;
         boolean mainFlag = true;
         boolean flag = true;
-        //boolean isConfirmed = false;
         String taskSetName;
         String taskDescription;
         String taskDueDate;
         String taskCompletionStatus;
 
         while (mainFlag) { //Checks to see if user wants to create a new task set along with new tasks or add tasks to an already existing task set or leave the ToDoList mode.
-            System.out.println("Do you want to [1]create a new set of tasks or [2]access an existing set of tasks? or [3]go back: ");
+
+            System.out.println("The Following are existing task sets:");
+            showTaskSets();
+            System.out.println("Do you want to [1]create a new set of tasks or [2]access an existing set of tasks? or [3]delete an existing set if tasks? [4]go back: ");
             try {
                 String mainInputOption = myScanner.nextLine();
                 mainOption = Integer.parseInt(mainInputOption);
 
-                if (mainOption == 1 || mainOption == 2 || mainOption == 3) {
+                if (mainOption == 1 || mainOption == 2 || mainOption == 3 || mainOption == 4) {
                     //mainFlag = false;
 
                 } else {
-                    System.out.println("Please select option 1 or option 2 or option 3.");
+                    System.out.println("Please select an available option.");
                 }
             } catch (Exception e) {
 
-                System.out.println("Enter the number one for option 1 or number two for option 2 or number three for option 3.");
+                System.out.println("Enter the number associated with the desired option.");
             }
 
-            try {
+            //try {
                 if (mainOption == 1) {
                     System.out.println("Enter the name for the set you would want to have your created tasks under: ");
                     taskSetName = myScanner.nextLine() + ".txt";
@@ -105,6 +107,8 @@ public class ToDoList {
                 }
                 if (mainOption == 2) {
                     String taskSetPath;
+                    int taskSelector = 0;
+                    ArrayList<String> allTask;
                     while (flag) {
                         System.out.println("What set you want to access? :");
                         taskSetName = myScanner.nextLine() + ".txt";
@@ -113,22 +117,62 @@ public class ToDoList {
                         if (Files.exists(path)) {
                             taskSetPath = path.toString();
                             readTask(taskSetPath);
+
                             if (!InputConfirmation("Want to access another set?")) {
                                 flag = false;
                             }
-                            //else{}
+                            if (!InputConfirmation("Want to modify this set?")) {
+                                flag = false;
+                            }else {
+                                readTask(taskSetPath);
+
+                                System.out.print("Which task you want to modify");
+
+                                switch(taskSelector){
+                                    case 1 :
+                                }
+                            }
+                        }
+                    }
+                }
+                if (mainOption == 3){
+                    String taskSetPath;
+                    int taskSelector = 0;
+                    while (flag){
+                        System.out.println("What set you want to delete? :");
+                        taskSetName = myScanner.nextLine() + ".txt";
+                        Path path = Paths.get(toDoListMainFolder + taskSetName);
+                        try {
+
+                            if (Files.exists(path)) {
+                                Files.delete(path);
+                                showTaskSets();
+                                System.out.println(taskSetName + " has been deleted.");
+                            } else {
+                                System.out.println(taskSetName + " doesn't exist.");
+                            }
+                        } catch (Exception e){e.printStackTrace();}
+
+                        if (!InputConfirmation("Want to delete another set?")) {
+                            flag = false;
                         }
                     }
 
+
+
+
+
                 }
-            }
-            catch (Exception e) {e.printStackTrace(); }
+            //}
+            //catch (Exception e) {e.printStackTrace(); }
             if(InputConfirmation("Do you want to exit back to Main Mode Menu?")){
                 mainFlag = false;
                 //flag = true;
                 //myScanner.close();
             }
             flag = true;
+        } //catch (IOException e) {
+               // e.printStackTrace();
+            //}
         }
-    }
 }
