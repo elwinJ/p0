@@ -59,7 +59,6 @@ public class ToDoList {
                     System.out.println(taskParsed[0]);
                     System.out.println(taskParsed[1]);
                     System.out.println(taskParsed[2]);
-                    //System.out.println("Which task you want to update? ");
 
                     System.out.println("Enter new description or leave blank to remain the same: ");
                     userInput = myScanner.nextLine();
@@ -68,7 +67,6 @@ public class ToDoList {
                         //System.out.println("This is UpdateTask userInput: " + userInput);
                         if (!userInput.isEmpty()) {
                             taskParsed[0] = userInput;
-                            //taskList.set(userOption, userInput);
                         }
                     }
 
@@ -94,7 +92,12 @@ public class ToDoList {
                         return taskList;
                     }
                 }
-            //case 2:
+            case 2:
+                while (true){
+                    userOption = confirmOption(taskList.size()); //Get's the size of the array and use it for user to decide which task to modify.
+                    taskList.remove(userOption - 1); //removes the task at the chosen index.
+                    return taskList;
+                }
             //case 3:
         }
         return taskList;
@@ -119,7 +122,6 @@ public class ToDoList {
         boolean flag = true;
         String taskSetName;
         Scanner myScanner = new Scanner(System.in);
-        //String taskSetPath = setPath;
         Path path;
 
         int taskSelector = 0;
@@ -144,7 +146,6 @@ public class ToDoList {
         }
 
     }
-
 
     public static void main(String ...args) {
         Scanner myScanner = new Scanner(System.in);
@@ -176,7 +177,6 @@ public class ToDoList {
                 System.out.println("Enter the number associated with the desired option.");
             }
 
-
                 if (mainOption == 1) {
                     System.out.println("Enter the name for the set you would want to have your created tasks under: ");
                     taskSetName = myScanner.nextLine() + ".txt";
@@ -201,12 +201,11 @@ public class ToDoList {
                 if (mainOption == 2) {
                     String taskSetPath;
                     int taskSelector = 0;
-                    ArrayList<String> allTask;
+                    ArrayList<String> allTask = null;
                     while (flag) {
                         System.out.println("What set you want to access? :");
                         taskSetName = myScanner.nextLine() + ".txt";
                         Path path = Paths.get(toDoListMainFolder + taskSetName);
-                        //System.out.println(toDoListMainFolder + taskSetName);
                         if (Files.exists(path)) {
                             taskSetPath = path.toString();
                             readTask(taskSetPath);
@@ -222,40 +221,22 @@ public class ToDoList {
                                     modificationOptions.add(3);
 
                                     allTask = loadLines(taskSetPath);
-                                    String localMessage ="Want to [1]update a task or [2]Mark a task complete or [3]delete a task? or [4] Go back ";
+                                    String localMessage ="Want to [1]update a task or [2]delete a task? or [3]add a task or [4] Go back ";
                                     System.out.println("WE ARE HERE !!!!!!!");
                                     int userModificationOption = confirmOption(modificationOptions,localMessage,"int");
-                                    //readTask(taskSetPath);
 
-//                                    switch (userModificationOption){
-//                                        case 1:
-//                                            System.out.println("Which task you want to update? ");
-//                                            break;
-//                                        case 2:
-//                                            System.out.println("Which task you completed? ");
-//                                            break;
-//                                        case 3:
-//                                            System.out.println("Which task you want to delete? ");
-//                                            break;
-//                                    }
-                                    //if (userModificationOption < 4){
-                                        //Under construction.
-                                        try{
-                                            allTask = updateTask(allTask,userModificationOption, taskSetPath);//Modification of a task occurs here.
-                                            System.out.println(taskSetPath);
-                                            System.out.println("PRIOR TO MODIFYING");
-                                            System.out.println(path.toString());
-                                            System.out.println(path.toString());
-                                            if (Files.exists(path)); //Checks if task set's path exists.
-                                                Files.delete(path); //Deletes the file.  //Step 1: Delete outdated file.
-                                                System.out.println("File deleted");
-                                                createFile(toDoListMainFolder +taskSetName); //Step 2: Create new empty file.
-                                                System.out.println("File has been created");
-                                                writeArrayListToFile(allTask, taskSetPath); // Step 3: Write into the new empty file.
-                                                System.out.println("Now file has been edited");
-                                        } catch(Exception e) { e.printStackTrace();}
+                                    allTask = updateTask(allTask,userModificationOption, taskSetPath);//Modification of a task occurs here.
 
-                                    //}
+                                    try {
+                                        if (Files.exists(path) & allTask != null) ; //Checks if task set's path exists.
+                                        Files.delete(path); //Deletes the file.  //Step 1: Delete outdated file.
+                                        System.out.println("File deleted");
+                                        createFile(toDoListMainFolder + taskSetName); //Step 2: Create new empty file.
+                                        System.out.println("File has been created");
+                                        writeArrayListToFile(allTask, taskSetPath); // Step 3: Write into the new empty file.
+                                        System.out.println("Now file has been edited");
+                                        allTask = null;
+                                    } catch (Exception e) {e.printStackTrace();}
                                 }
                             }
                         }
@@ -267,8 +248,7 @@ public class ToDoList {
 
             if(InputConfirmation("Do you want to exit back to Main Mode Menu?")){
                 mainFlag = false;
-                //flag = true;
-                //myScanner.close();
+
             }
             flag = true;
         }
