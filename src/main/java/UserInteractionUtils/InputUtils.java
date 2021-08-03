@@ -8,20 +8,20 @@ import java.util.Scanner;
 public class InputUtils {
     static Scanner myScanner = new Scanner(System.in);
 
-    static public String arrayToString(String array[]){
-        StringBuilder sb = new StringBuilder(); //Create StringBuilder object.
-        for (int i = 0; i < array.length; i++){ //Appends array elements into sb.
-            if (i == array.length-1){ //Checks if element is last element to not add the separator.
-                sb.append(array[i]);
-                System.out.println("StringBuilder column: ");
-            }
-            else{ //If not last element then appends with separator.
-                sb.append(array[i] + " ; ");
-            }
-        }
-        return(sb.toString()); //returns a String.
+//    static public String arrayToString(String array[]){
+//        StringBuilder sb = new StringBuilder(); //Create StringBuilder object.
+//        for (int i = 0; i < array.length; i++){ //Appends array elements into sb.
+//            if (i == array.length-1){ //Checks if element is last element to not add the separator.
+//                sb.append(array[i]);
+//                System.out.println("StringBuilder column: ");
+//            }
+//            else{ //If not last element then appends with separator.
+//                sb.append(array[i] + " ; ");
+//            }
+//        }
+//        return(sb.toString()); //returns a String.
 
-    }
+//    }
     static public boolean InputConfirmation(String customMessage){
         List<String> deny = new ArrayList<>(2);
         List<String> accept = new ArrayList<>(2);

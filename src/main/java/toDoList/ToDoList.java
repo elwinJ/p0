@@ -46,7 +46,7 @@ public class ToDoList {
         String userInput;
         String taskToBeParsed; //Variable that holds on to the task from the array the user wants to modify.
         String[] taskParsed; //Array that will have all fields a task with each field having a respective index.
-        String modifiedTask;
+        String modifiedTask = "";
 
         switch (option){
             case 1:
@@ -79,7 +79,8 @@ public class ToDoList {
                     }
 
                     System.out.println("You have entered : " + taskParsed[0] + " and " + taskParsed[1]);
-                    modifiedTask = arrayToString(taskParsed);
+                    //modifiedTask = arrayToString(taskParsed);
+                    modifiedTask = String.join(" ; ",  taskParsed);
                     //System.out.println("We are checking it out!!!");
                     System.out.print(modifiedTask);
                     taskList.set(userOption - 1, modifiedTask); //The new task is added back into the ArrayList.
@@ -98,7 +99,34 @@ public class ToDoList {
                     taskList.remove(userOption - 1); //removes the task at the chosen index.
                     return taskList;
                 }
-            //case 3:
+            case 3:
+                while(true){
+                    System.out.println("Add a description: ");
+                    userInput = myScanner.nextLine();
+                    modifiedTask += userInput + " ; ";
+                    System.out.println("Add a deadline: ");
+                    userInput = myScanner.nextLine();
+                    modifiedTask += userInput + " ; " + "not completed";
+
+                    taskList.add(modifiedTask);
+
+                    return taskList;
+            }
+            case 4:
+                while (true){
+                    userOption = confirmOption(taskList.size()); //Get's the size of the array and use it for user to decide which task to modify.
+                    taskToBeParsed = taskList.get(userOption -1);
+                    taskParsed = taskToBeParsed.split(" ; "); //parses the task String.
+                    taskParsed[2] = "COMPLETED!!!!!";
+                    //modifiedTask = arrayToString(taskParsed);
+                    modifiedTask = String.join(" ; ",  taskParsed);
+                    taskList.set(userOption-1, modifiedTask);
+
+                    return taskList;
+
+
+                }
+
         }
         return taskList;
     }
@@ -219,9 +247,11 @@ public class ToDoList {
                                     modificationOptions.add(1);
                                     modificationOptions.add(2);
                                     modificationOptions.add(3);
+                                    modificationOptions.add(4);
+                                    modificationOptions.add(5);
 
                                     allTask = loadLines(taskSetPath);
-                                    String localMessage ="Want to [1]update a task or [2]delete a task? or [3]add a task or [4] Go back ";
+                                    String localMessage ="Want to [1]update a task or [2]delete a task? or [3]add a task or [4] Complete a task ";
                                     System.out.println("WE ARE HERE !!!!!!!");
                                     int userModificationOption = confirmOption(modificationOptions,localMessage,"int");
 
@@ -248,9 +278,9 @@ public class ToDoList {
 
             if(InputConfirmation("Do you want to exit back to Main Mode Menu?")){
                 mainFlag = false;
-
             }
             flag = true;
+            mainOption = 0;
         }
     }
 }
