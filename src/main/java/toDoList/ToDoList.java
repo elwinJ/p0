@@ -265,7 +265,7 @@ public class ToDoList {
                                         System.out.println("File has been created");
                                         writeArrayListToFile(allTask, taskSetPath); // Step 3: Write into the new empty file.
                                         System.out.println("Now file has been edited");
-                                        allTask = null;
+                                        //allTask = null;
                                     } catch (Exception e) {e.printStackTrace();}
                                 }
                             }

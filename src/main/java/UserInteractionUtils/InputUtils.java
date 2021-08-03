@@ -92,6 +92,7 @@ public class InputUtils {
                 if (inputType == "int") { //this will check for the appropriate input type needed to scan in.
 
                     userOptionInt = myScanner.nextInt();
+                    myScanner.nextLine();
 
                     if (rangeOfOptions.contains(userOptionInt)) {
                         return rangeOfOptions.get(rangeOfOptions.indexOf(userOptionInt));
