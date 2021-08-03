@@ -7,21 +7,19 @@ import java.util.ArrayList;
 
 public class FileManager {
 
-    private static String parent_data_dir = "/main_data_folder";
-    private static BufferedReader reader;
-
-//    public static boolean checkFilePath(String taskSetPath){
-//
-//        Path path = Paths.get(taskSetPath);
-//        if (Files.exists(path)){
-//            return(true);
-//        } else {
-//            return(false);
-//        }
-//    }
+    private static final String parent_data_dir = "/main_data_folder";
+    public static BufferedReader reader;
 
     public static void initDir() {
+        /*
+          Will create directory "main_data_folder" within the present working directory.
 
+          <p>
+          This method will create the directory "main_data_folder" to archive the directories needed
+          for each mode.
+          </>
+          {@code null} Won't return anything.
+         */
         try { //attempt to get the parent_data_dir and creates if not exist.
 
             String pwd = getCurrentDirectory(); // gets this project's directory.
@@ -30,14 +28,13 @@ public class FileManager {
             System.out.println(parent_data_dir + " was created");
 
         } catch (IOException e) {
-            System.err.println("Failed to create direcotry!"+ e.getMessage());
+            System.err.println("Failed to create directory!"+ e.getMessage());
         }
     }
 
     public static String getCurrentDirectory() {
-        String dir = System.getProperty("user.dir");
 
-        return(dir);
+        return(System.getProperty("user.dir"));
     }
 
     public static ArrayList<String> getFileNames(String targetFolderPath){
@@ -45,8 +42,10 @@ public class FileManager {
 
         File[] files = new File(targetFolderPath).listFiles();
 
-        for (int index = 0; index < files.length;index++){
-            fileNames.add(files[index].getName());
+        if (files != null) {
+            for (File file : files) {
+                fileNames.add(file.getName());
+            }
         }
 
         return fileNames;
@@ -56,8 +55,8 @@ public class FileManager {
         ArrayList<String> fileNames = getFileNames(targetFolderPath);
 
         System.out.println("__________________________");
-        for (int index = 0; index < fileNames.size(); index ++){
-            System.out.println(fileNames.get(index));
+        for (String fileName : fileNames) {
+            System.out.println(fileName);
         }
         System.out.println("__________________________");
     }
@@ -65,19 +64,46 @@ public class FileManager {
     public static ArrayList<String> loadLines(String targetFilePath){
 
         ArrayList<String> loadedlines = new ArrayList<>();
-        try {
-            reader = new BufferedReader(new FileReader(targetFilePath));
+        try (BufferedReader reader = new BufferedReader(new FileReader(targetFilePath))){
             String line = reader.readLine(); //will be the variable to hold onto lines read.
             while (line != null){ //Wil continue reading lines until it can't find anymore lines to read.
                 loadedlines.add(line); //will add a whole line into the ListArray.
                 line = reader.readLine();//reads next line,
             }
+            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return loadedlines;
 
+    }
+
+    public static void createFile(String filePath){
+        Path path = Paths.get(filePath);
+
+        try{
+            FileWriter myWriter = new FileWriter((String.valueOf(path))); //Creates file.
+            myWriter.close();
+        }catch(IOException e){}
+    }
+
+    public static void deleteFile(String filePath){
+        Path path = Paths.get(filePath);
+        try{
+            Files.delete(path); //Deletes the file.
+        }catch(IOException e){}
+    }
+
+    public static void writeArrayListToFile(ArrayList<String> allTask, String filePath){
+        try {
+            //Path path = Paths.get(filePath);
+            FileWriter myWriter = new FileWriter(filePath);
+            for (String task : allTask) {
+                myWriter.write(task + "\n");
+            }
+            myWriter.close();
+        } catch (Exception e){}
     }
 
     public static void main(String[] args) {
