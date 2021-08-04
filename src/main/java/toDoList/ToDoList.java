@@ -1,4 +1,6 @@
 package toDoList;
+import fileSearchCreation.FileManager;
+
 import java.io.*;
 import java.nio.file.*;
 //import java.util.ArrayList;
@@ -176,6 +178,7 @@ public class ToDoList {
     }
 
     public static void main(String ...args) {
+        FileManager.main(); //Checks and creates necessary directories.
         Scanner myScanner = new Scanner(System.in);
         int mainOption = 0;
         boolean mainFlag = true;

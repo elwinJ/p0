@@ -106,25 +106,29 @@ public class FileManager {
         } catch (Exception e){}
     }
 
-    public static void main(String[] args) {
+    public static void main(String ...args) {
 
         System.out.println(getCurrentDirectory());
 
         try {
-
             Path path = Paths.get(getCurrentDirectory() + "/central_folder");
 
             //java.nio.file.Files;
-            Files.createDirectories(path);
+            if(!Files.exists(path)) {
+                Files.createDirectories(path);
 
-            System.out.println("central_folder Directory is created at "+ getCurrentDirectory());
+                System.out.println("central_folder Directory is created at " + getCurrentDirectory());
+            }
 
             path = Paths.get(getCurrentDirectory() + "/central_folder" +"/to_do_list_folder");
 
             //java.nio.file.Files;
-            Files.createDirectories(path);
 
-            System.out.println("to_do_list_folder Directory is created at "+ getCurrentDirectory() + "/central_folder" + "/to_do_list_folder");
+            if(!Files.exists(path)) {
+                Files.createDirectories(path);
+
+                System.out.println("to_do_list_folder Directory is created at " + getCurrentDirectory() + "/central_folder" + "/to_do_list_folder");
+            }
 
         } catch (IOException e) {
 
