@@ -24,6 +24,8 @@
 - Follow the program's prompts.
 
 ## Future implementations
-[ ] Use append for FileWriter when applicable(instead of creating new files.)
-[ ] Get rid of redundant prompts.
-[ ] Create necessary options/prompts.
+- [ ] Use append for FileWriter when applicable(instead of creating new files.)
+
+- [ ] Get rid of redundant prompts.
+
+- [x] Create necessary options/prompts.
