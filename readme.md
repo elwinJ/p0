@@ -28,4 +28,4 @@
 
 - [ ] Get rid of redundant prompts.
 
-- [x] Create necessary options/prompts.
+- [ ] Create necessary options/prompts.
